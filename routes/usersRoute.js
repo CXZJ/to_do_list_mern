@@ -1,41 +1,40 @@
-import express from "express";
-import { createTodo, deleteTodo, getAllTodos, updateTodo } from "../controllers/todolist.js";
+import express from 'express';
+import { signIn, signUp, userInfor } from '../controllers/users.js';
+import { auth } from '../middleware/auth.js';
 
 const router = express.Router()
 
 /**
  * @openapi
  * tags:
- *   - name: Todo
- *     description: Todo list related operations
+ *   - name: User
+ *     description: User related operations
  */
 
 /**
  * @openapi
- * /get_all:
+ * /user-infor:
  *   get:
  *     tags:
- *       - Todo
- *     summary: Get all todo list from database (no auth)
+ *       - User
+ *     summary: Get user information (need auth)
  *     responses:
  *       '200':
- *         description: Success
+ *         description: User information retrieved
  *       '403':
- *         description: Requested resource is forbidden
- *       '400':
- *         description: Bad request
+ *         description: Unauthorized
  *       '500':
  *         description: Internal server error
  */
-router.get("/get_all", getAllTodos)
+router.get("/user-infor", auth, userInfor)
 
 /**
  * @openapi
- * /add_todo:
+ * /signup:
  *   post:
  *     tags:
- *       - Todo
- *     summary: Add a new todo list (no auth)
+ *       - User
+ *     summary: Sign up a new user
  *     requestBody:
  *       required: true
  *       content:
@@ -43,21 +42,30 @@ router.get("/get_all", getAllTodos)
  *           schema:
  *             type: object
  *             properties:
- *               todo_image:
+ *               personal_id:
  *                 type: string
- *                 example: "https://api.dicebear.com/9.x/icons/svg?seed=Katherine"
- *               todo_name:
+ *                 example: "BN12363468"
+ *               name:
  *                 type: string
- *                 example: "Doing Japanese exercise"
- *               todo_desc:
+ *                 example: "juwono"
+ *               email:
  *                 type: string
- *                 example: "learn basic kanji and basic grammar in conversation"
- *               todo_status:
+ *                 example: "juwono@gmail.com"
+ *               password:
  *                 type: string
- *                 example: "active"
+ *                 example: "Password123"
+ *               confirmPassword:
+ *                 type: string
+ *                 example: "Password123"
+ *               address:
+ *                 type: string
+ *                 example: "Bandung, Indonesia"
+ *               phone_number:
+ *                 type: string
+ *                 example: "089286382736431"
  *     responses:
  *       '200':
- *         description: Add todo successfully
+ *         description: New user registration successfully
  *       '403':
  *         description: Requested resource is forbidden
  *       '400':
@@ -65,22 +73,15 @@ router.get("/get_all", getAllTodos)
  *       '500':
  *         description: Internal server error
  */
-router.post("/add_todo", createTodo)
+router.post("/signup", signUp)
 
 /**
  * @openapi
- * /update_todo/{id}:
- *   patch:
+ * /signin:
+ *   post:
  *     tags:
- *       - Todo
- *     summary: Update todo list (no auth)
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: todo ID
- *         schema:
- *           type: string
+ *       - User
+ *     summary: Sign in user
  *     requestBody:
  *       required: true
  *       content:
@@ -88,54 +89,22 @@ router.post("/add_todo", createTodo)
  *           schema:
  *             type: object
  *             properties:
- *               todo_image:
+ *               email:
  *                 type: string
- *                 example: "https://api.dicebear.com/9.x/avataaars-neutral/svg?seed=Wyatt"
- *               todo_name:
+ *                 example: "juwono@gmail.com"
+ *               password:
  *                 type: string
- *                 example: "Doing Japanese exercise updated"
- *               todo_desc:
- *                 type: string
- *                 example: "learn basic kanji and basic grammar in conversation updated"
- *               todo_status:
- *                 type: string
- *                 example: "active"
+ *                 example: "Password123"
  *     responses:
  *       '200':
- *         description: Todo list updated
+ *         description: Sign in successfully
+ *       '403':
+ *         description: Requested resource is forbidden
  *       '400':
  *         description: Bad request
- *       '404':
- *         description: Not Found
  *       '500':
  *         description: Internal server error
  */
-router.patch("/update_todo/:id", updateTodo)
-
-/**
- * @openapi
- * /delete_todo/{id}:
- *   delete:
- *     tags:
- *       - Todo
- *     summary: Delete a todo (no auth)
- *     parameters:
- *       - name: id
- *         in: path
- *         required: true
- *         description: Todo ID
- *         schema:
- *           type: string
- *     responses:
- *       '200':
- *         description: Todo deleted
- *       '400':
- *         description: Bad request
- *       '404':
- *         description: Not Found
- *       '500':
- *         description: Internal server error
- */
-router.delete("/delete_todo/:id", deleteTodo)
+router.post("/signin", signIn)
 
 export default router
