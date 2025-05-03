@@ -116,11 +116,11 @@ const swaggerSpec = swaggerJsDoc({
         },
         servers: [
             {
-                url: 'http://localhost:5000/service/user',
+                url: 'http://localhost:5001/service/user',
                 description: 'Development - user',
             },
             {
-                url: "http://localhost:5000/service/todo",
+                url: "http://localhost:5001/service/todo",
                 description: 'Development - todo'
             }
         ],

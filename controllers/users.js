@@ -1,6 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import Users from '../models/users.js';
+import { userSendMail } from './userSendMail.js';
 
 const { DEFAULT_CLIENT_URL } = process.env
 
